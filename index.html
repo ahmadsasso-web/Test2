@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HelloFresh Finance Guide to NotebookLM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chosen Palette: Light Warm Green -->
+    <!-- Application Structure Plan: The application uses a task-oriented tabbed navigation (Setup, Single-Source Q&A, Multi-Source Synthesis, Sharing, Saving Insights, Best Practices) to break down the linear guide into logical, interactive sections. The core of the app is a simplified, interactive UI "simulator" for NotebookLM, allowing users to learn by clicking mock elements, which is more engaging and effective for teaching software than static text. Step 1 is now non-sequential in interaction but teaches the correct order (Create then Add Sources). The workflow was reorganized to prioritize Saving & Organizing (Step 4) before Sharing (Step 5). -->
+    <!-- Visualization & Content Choices: Report Info: NotebookLM usage steps -> Goal: Teach software workflow for financial analysis -> Presentation Method: Interactive HTML/CSS mock-up of the NotebookLM interface, broken into tabs corresponding to workflow stages, using finance-specific examples. -> Interaction: User clicks on mock buttons to reveal contextual explanations. Sequential flow removed for reliability. -> Justification: Active learning with relevant examples (Fixed Assets, Inventory) improves team adoption and understanding of tool utility. -> Library/Method: Vanilla JavaScript for all interactivity (tab switching, click events). NO charts needed. CONFIRMING NO SVG/Mermaid. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* New Warm Green Palette */
+        body { background-color: #F3F8F1; color: #3A4A35; }
+        .text-header { color: #4D7D54; }
+        .accent-bg { background-color: #7AB893; }
+        .accent-text { color: #7AB893; }
+        .light-bg { background-color: #E6F0E5; }
+
+        .tab-active {
+            background-color: #7AB893;
+            color: #FFFFFF;
+        }
+        .tab-inactive {
+            background-color: #E6F0E5;
+            color: #4D7D54;
+        }
+        .interactive-element {
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            opacity: 1;
+        }
+        .interactive-element:hover {
+            transform: scale(1.03);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        /* Removed .interactive-element.disabled since sequential logic is removed */
+        
+        .explanation-box {
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+            opacity: 0;
+            transform: translateY(10px);
+            height: 0;
+            overflow: hidden;
+        }
+        .explanation-box.visible {
+            opacity: 1;
+            transform: translateY(0);
+            height: auto;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body class="bg-[#F3F8F1] text-[#3A4A35]">
+    <div class="container mx-auto p-4 md:p-8 max-w-5xl">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl md:text-5xl font-bold text-header">HelloFresh Finance Guide to NotebookLM</h1>
+        </header>
+
+        <nav id="tabs" class="flex flex-wrap justify-center gap-2 mb-8 text-sm md:text-base">
+            <button data-tab="setup" class="tab-button px-3 py-2 rounded-full font-semibold transition-colors duration-300">1. Setup & Config</button>
+            <button data-tab="single-source" class="tab-button px-3 py-2 rounded-full font-semibold transition-colors duration-300">2. Verify & Extract</button>
+            <button data-tab="multi-source" class="tab-button px-3 py-2 rounded-full font-semibold transition-colors duration-300">3. Chat & Interact</button>
+            <!-- SWAPPED STEP 4 & 5 -->
+            <button data-tab="saving" class="tab-button px-3 py-2 rounded-full font-semibold transition-colors duration-300">4. Saving & Organizing</button>
+            <button data-tab="sharing-collaboration" class="tab-button px-3 py-2 rounded-full font-semibold transition-colors duration-300">5. Sharing & Collaboration</button>
+            <button data-tab="best-practices" class="tab-button px-3 py-2 rounded-full font-semibold transition-colors duration-300">6. Best Practices</button>
+        </nav>
+
+        <main id="tab-content" class="bg-white rounded-2xl shadow-lg p-6 md:p-8 min-h-[500px]">
+            <div id="setup-content" class="tab-pane">
+                <h2 class="text-2xl font-bold text-header mb-4">Step 1: Setup & Configuration</h2>
+                <p class="text-base text-[#3A4A35] mb-6">The initial setup requires you to **Create** the notebook first, then **Add Sources** (1A then 1B). Click the blocks below in any order to reveal the explanation for that step.</p>
+                
+                <div class="light-bg p-6 rounded-lg flex flex-col md:flex-row gap-6">
+                    
+                    <!-- Sequential Flow: 1A and 1B (Interaction is now parallel, but the process is taught as sequential) -->
+                    <div class="flex flex-col md:flex-row gap-4 md:w-2/3 p-4 bg-white rounded-lg border border-[#E6F0E5] shadow-inner">
+                        <!-- Step 1A -->
+                        <div data-target="new-notebook-exp" id="new-notebook-btn" class="interactive-element accent-bg text-white p-4 rounded-lg text-center shadow-md w-full md:w-1/2">
+                            <p class="font-semibold text-sm">Action 1A: Start Project</p>
+                            <span class="text-2xl font-bold">📚</span>
+                            <p class="font-semibold">Create New Notebook</p>
+                        </div>
+                        <!-- Step 1B -->
+                        <div data-target="add-source-exp" id="add-source-btn" class="interactive-element accent-bg text-white p-4 rounded-lg text-center shadow-md w-full md:w-1/2">
+                            <p class="font-semibold text-sm">Action 1B: Populate Data</p>
+                            <span class="text-2xl font-bold">📂</span>
+                            <p class="font-semibold">Add Sources</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Configure (Separate) -->
+                    <div data-target="configure-exp" class="interactive-element accent-bg text-white p-4 rounded-lg text-center shadow-md w-full md:w-1/3 flex flex-col justify-center">
+                        <p class="font-semibold text-sm">Optional Step</p>
+                        <span class="text-2xl font-bold">⚙️</span>
+                        <p class="font-semibold">Configure AI</p>
+                    </div>
+                </div>
+
+                <!-- Explanation Boxes -->
+                <div id="new-notebook-exp" class="explanation-box bg-blue-50 border border-blue-200 text-blue-800 p-4 rounded-lg">
+                    <h3 class="font-bold">1A. Creating Your Financial Project</h3>
+                    <p>This is where you define your workspace. Name it clearly, e.g., "Q4 2024 Inventory Analysis" or "APAC Fixed Asset Review."</p>
+                </div>
+                <div id="add-source-exp" class="explanation-box bg-green-50 border border-green-200 text-green-800 p-4 rounded-lg">
+                    <h3 class="font-bold">1B. Importing Documents</h3>
+                    <p>Upload your financial reports (PDFs, spreadsheets, internal memos, etc.). This content is private and the only data the AI will use.</p>
+                    <ul class="list-disc list-inside mt-2 text-sm">
+                        <li>**Content Limit:** You can add up to **300 sources** per notebook.</li>
+                        <li>**Best Practice:** Upload related documents, such as all regional Accounts Payable reports or all Fixed Asset schedules, to a single notebook for synthesis.</li>
+                    </ul>
+                </div>
+                <div id="configure-exp" class="explanation-box bg-yellow-50 border border-yellow-200 text-yellow-800 p-4 rounded-lg">
+                    <h3 class="font-bold">Configure Notebook: Setting AI Preferences</h3>
+                    <p>Use the 'Configure' setting (usually near the chat bar) to set rules for the AI's responses. This is critical for finance use cases. For example, you can instruct the AI to:</p>
+                    <ul class="list-disc list-inside mt-2 text-sm">
+                        <li>**Be concise and formal:** "Always respond in a concise, professional tone, focusing on quantifiable metrics."</li>
+                        <li>**Use specific terminology:** "When discussing Fixed Assets, strictly use IFRS terminology."</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div id="single-source-content" class="tab-pane hidden">
+                <h2 class="text-2xl font-bold text-header mb-4">Step 2: Verify & Extract from Single Source</h2>
+                <p class="text-base text-[#3A4A35] mb-6">Use the tools in the **'Studio' panel in the right hand side** on an individual source to validate the AI's understanding. This is essential for validating the AI has understood your source document and for getting rapid summaries/videos/audio overviews from a large report without reading it page by page.</p>
+                <div class="light-bg p-6 rounded-lg">
+                    <div class="bg-white p-4 rounded-lg shadow-inner">
+                        <h3 class="font-bold text-lg text-header">Source Card: "Q4 2024 Forecast.pdf"</h3>
+                        <p class="text-sm text-gray-500 mb-4">Indexed. Ready for financial analysis.</p>
+                        <div class="flex flex-col md:flex-row gap-4">
+                            <button data-target="summarize-exp-2" class="interactive-element flex-1 accent-bg text-white py-2 px-4 rounded-lg font-semibold">Summarize</button>
+                            <button data-target="ask-exp-2" class="interactive-element flex-1 accent-bg text-white py-2 px-4 rounded-lg font-semibold">Ask Questions</button>
+                            <button data-target="topics-exp-2" class="interactive-element flex-1 accent-bg text-white py-2 px-4 rounded-lg font-semibold">Generate Themes</button>
+                        </div>
+                    </div>
+                </div>
+                 <div id="summarize-exp-2" class="explanation-box bg-blue-50 border border-blue-200 text-blue-800 p-4 rounded-lg">
+                    <h3 class="font-bold">Summarize (Quick Audit)</h3>
+                    <p>Get a high-level summary of this document's scope, key figures, and conclusions. Useful for auditing reports or preparing for a review meeting. This **validates** that the AI correctly understood the document's main content.</p>
+                </div>
+                <div id="ask-exp-2" class="explanation-box bg-green-50 border border-green-200 text-green-800 p-4 rounded-lg">
+                    <h3 class="font-bold">Ask Questions (Metric Extraction)</h3>
+                    <p>Ask specific, complex questions *about this single file* to **extract** metrics. Examples:</p>
+                    <ul class="list-disc list-inside mt-2 text-sm">
+                        <li>"What is the total accumulated depreciation for Fixed Assets in this report?"</li>
+                        <li>"Calculate the inventory turnover ratio based on the numbers provided."</li>
+                    </ul>
+                </div>
+                 <div id="topics-exp-2" class="explanation-box bg-yellow-50 border border-yellow-200 text-yellow-800 p-4 rounded-lg">
+                    <h3 class="font-bold">Generate Themes (Focusing Analysis)</h3>
+                    <p>The AI will identify key themes like "Capital Expenditure Projections" or "Accounts Payable Aging." This helps you quickly confirm the document covers the topics you need.</p>
+                </div>
+            </div>
+
+            <div id="multi-source-content" class="tab-pane hidden">
+                <h2 class="text-2xl font-bold text-header mb-4">Step 3: Chat and interact with the AI</h2>
+                 <p class="text-base text-[#3A4A35] mb-6">This is the most powerful part. Use the **main chat bar** (labeled "Ask the Notebook") to analyze data *across* all your uploaded documents. This allows for complex comparisons and cross-referencing that would be time-consuming to do manually.</p>
+                 <div class="light-bg p-6 rounded-lg">
+                    <div class="bg-white p-4 rounded-lg shadow-inner">
+                        <p class="text-gray-500 mb-2">Ask the Notebook...</p>
+                        <div class="w-full light-bg p-3 rounded-lg border border-gray-300">
+                            <p class="text-gray-800">Compare the **Inventory** valuation methods used in the US and EU reports, and highlight any impact on Q3 Gross Margin.</p>
+                        </div>
+                         <div class="mt-4 accent-bg text-white p-4 rounded-lg">
+                            <h4 class="font-bold">AI Response:</h4>
+                            <p class="text-sm">The US report uses FIFO [1] while the EU report shifted to Weighted Average [2]. This difference contributed to a 1.2% variance in Q3 Gross Margin [3].</p>
+                        </div>
+                        <div data-target="citations-exp" class="interactive-element mt-4 p-3 bg-yellow-100 text-yellow-900 rounded-lg border border-yellow-300">
+                            <p><span class="font-bold">💡 What are those citations like [1] and [2]?</span> (Click to find out)</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="citations-exp" class="explanation-box bg-yellow-50 border border-yellow-200 text-yellow-800 p-4 rounded-lg">
+                    <h3 class="font-bold">Citations are Your Evidence</h3>
+                    <p>Every response is backed by numbered citations that link directly to the exact snippets in your source documents. **Always click these** to verify the data in its original context. This is crucial for maintaining accuracy in financial reporting.</p>
+                </div>
+            </div>
+            
+            <!-- NEW STEP 4: SAVING & ORGANIZING -->
+            <div id="saving-content" class="tab-pane hidden">
+                <h2 class="text-2xl font-bold text-header mb-4">Step 4: Saving & Organizing Insights</h2>
+                <p class="text-base text-[#3A4A35] mb-6">Don't let valuable AI-generated answers disappear! Save the best insights to your Notes. This section also explains the tools available on the right-hand sidebar for visualizing and exploring your source data.</p>
+                
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div class="md:w-2/3 light-bg p-6 rounded-lg">
+                        <div class="accent-bg text-white p-4 rounded-lg shadow-md relative">
+                            <h4 class="font-bold">AI Response:</h4>
+                            <p class="text-sm">Here is a synthesized risk matrix for all pending **Accounts Payable** liabilities based on payment terms and currency volatility...</p>
+                             <div data-target="save-note-exp" class="interactive-element absolute -top-3 -right-3 bg-white w-10 h-10 rounded-full flex items-center justify-center text-header text-2xl shadow-lg">📌</div>
+                        </div>
+                        <div id="save-note-exp" class="explanation-box bg-blue-50 border border-blue-200 text-blue-800 p-4 rounded-lg">
+                            <h3 class="font-bold">Pinning a Response</h3>
+                            <p>Clicking the **Pin** icon saves the AI's response to your Notes sidebar. Use this to build your final deliverable (like an executive summary or a presentation outline) directly from verified insights.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="md:w-1/3 light-bg p-6 rounded-lg">
+                        <h3 data-target="source-card-exp" class="font-bold text-lg text-header mb-2 interactive-element accent-text">Right-Hand Source Card Panel (Click for Detail)</h3>
+                        <div class="bg-white p-3 rounded-lg shadow-inner mb-4">
+                            <p class="text-sm font-semibold">Saved Note:</p>
+                            <p class="text-xs text-gray-600">AP Risk Matrix Summary...</p>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg shadow-inner">
+                            <p class="text-xs font-semibold">Additional Source Cards (Video Overview, Mind Maps...)</p>
+                        </div>
+                    </div>
+                </div>
+                
+                 <div id="source-card-exp" class="explanation-box bg-green-50 border border-green-200 text-green-800 p-4 rounded-lg">
+                    <h3 class="font-bold">Advanced Visualization Tools in the Right Sidebar</h3>
+                    <ul class="list-disc list-inside mt-2 text-sm">
+                        <li>**Mind Maps:** Useful for visualizing the relationships and concepts between your financial reports, helping you map out complex dependencies (e.g., between Fixed Assets, depreciation schedules, and tax reporting).</li>
+                        <li>**Video Overview:** For notebooks with fewer documents, the AI can generate a short video overview explaining the core concepts it learned from your sources. This is perfect for quickly onboarding a new team member to a project's background.</li>
+                        <li>**Creativity:** Other tools may appear! The key is that this pane provides different ways (visual, audio, structured) to consume the information the AI has learned.</li>
+                </div>
+            </div>
+
+
+            <!-- NEW STEP 5: SHARING & COLLABORATION -->
+            <div id="sharing-collaboration-content" class="tab-pane hidden">
+                <h2 class="text-2xl font-bold text-header mb-4">Step 5: Sharing and Collaboration</h2>
+                <p class="text-base text-[#3A4A35] mb-6">Once your notebook is set up, you can share it with team members, much like sharing a Google Sheet or Slide deck. This allows multiple people to leverage the synthesized data and extracted insights simultaneously.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="light-bg p-6 rounded-lg border border-[#7AB893]">
+                        <h3 class="font-bold text-xl accent-text mb-2">Editor Access</h3>
+                        <p class="text-sm text-[#3A4A35] mb-3">Grant Editor access to team members who need to actively build the notebook or perform their own custom analysis.</p>
+                        <ul class="list-disc list-inside text-sm font-semibold">
+                            <li>Can **View and Interact** with the main chat.</li>
+                            <li>Can **View all Sources** and the **Studio** panel.</li>
+                            <li>Can **Add, Remove, or Replace** source documents.</li>
+                            <li>Can **Pin** new notes.</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="light-bg p-6 rounded-lg border border-[#7AB893]">
+                        <h3 class="font-bold text-xl accent-text mb-2">Viewer Access</h3>
+                        <p class="text-sm text-[#3A4A35] mb-3">Grant Viewer access to stakeholders (e.g., leadership) who only need to consume final insights or ask high-level questions.</p>
+                        <ul class="list-disc list-inside text-sm font-semibold">
+                            <li>Can **View and Interact** with the main chat.</li>
+                            <li>Can only **Communicate** with the AI based on existing sources.</li>
+                            <li>**Cannot** view sources or use the Studio panel tools.</li>
+                            <li>**Cannot** add, remove, or modify sources or notes.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="best-practices-content" class="tab-pane hidden">
+                <h2 class="text-2xl font-bold text-header mb-4">Step 6: Best Practices & Workflow Summary</h2>
+                <p class="text-base text-[#3A4A35] mb-6">To ensure accurate and reliable financial analysis, adhere to these practices. The AI is a tool; your expertise is the driving force.</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                    <div class="light-bg p-4 rounded-lg">
+                        <h3 class="font-bold text-lg text-header">Garbage In, Garbage Out</h3>
+                        <p class="text-sm text-[#3A4A35]">The quality of the AI's responses is entirely dependent on the quality and relevance of your source financial documents.</p>
+                    </div>
+                    <div class="light-bg p-4 rounded-lg">
+                        <h3 class="font-bold text-lg text-header">Always Verify</h3>
+                        <p class="text-sm text-[#3A4A35]">Treat the AI's output as a *draft*. Always check the citations against the raw financial data to confirm accuracy, especially when presenting final figures.</p>
+                    </div>
+                    <div class="light-bg p-4 rounded-lg">
+                        <h3 class="font-bold text-lg text-header">Be Specific</h3>
+                        <p class="text-sm text-[#3A4A35]">Ask focused, metric-driven questions, e.g., "What is the weighted average cost of inventory for Q3 2024?" not just "Tell me about inventory."</p>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="accent-bg text-white">
+                            <tr>
+                                <th class="p-3 font-semibold">Task</th>
+                                <th class="p-3 font-semibold">Where to Go</th>
+                                <th class="p-3 font-semibold">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-gray-200">
+                                <td class="p-3 font-bold">Calculate a single metric</td>
+                                <td class="p-3">Source Card Q&A</td>
+                                <td class="p-3">Ask <strong>"Calculate [Metric]"</strong> on the relevant document.</td>
+                            </tr>
+                            <tr class="border-b border-gray-200 bg-gray-50">
+                                <td class="p-3 font-bold">Compare two regional budgets</td>
+                                <td class="p-3">Main Chat Box</td>
+                                <td class="p-3">Ask <strong>"Compare the differences in methodology for [Topic]."</strong></td>
+                            </tr>
+                            <tr class="border-b border-gray-200">
+                                <td class="p-3 font-bold">Save a key finding</td>
+                                <td class="p-3">AI Response</td>
+                                <td class="p-3">Click the <strong>Pin</strong> icon to save to your Notes.</td>
+                            </tr>
+                             <tr class="border-b border-gray-200 bg-gray-50">
+                                <td class="p-3 font-bold">Verify source data</td>
+                                <td class="p-3">AI Response</td>
+                                <td class="p-3">Click the <strong>numbered citation</strong> (e.g., [1], [2]).</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const tabs = document.querySelectorAll('.tab-button');
+    const tabPanes = document.querySelectorAll('.tab-pane');
+    const interactiveElements = document.querySelectorAll('.interactive-element');
+    
+    // Step 1: Sequential Setup Elements (IDs kept for clarity, but logic is now parallel)
+    const newNotebookBtn = document.getElementById('new-notebook-btn');
+    const addSourceBtn = document.getElementById('add-source-btn');
+
+    function activateTab(tabId) {
+        tabs.forEach(button => {
+            if (button.dataset.tab === tabId) {
+                button.classList.remove('tab-inactive');
+                button.classList.add('tab-active');
+            } else {
+                button.classList.remove('tab-active');
+                button.classList.add('tab-inactive');
+            }
+        });
+
+        tabPanes.forEach(pane => {
+            if (pane.id === tabId + '-content') {
+                pane.classList.remove('hidden');
+            } else {
+                pane.classList.add('hidden');
+            }
+        });
+        
+        // Hide all explanation boxes when switching tabs
+        document.querySelectorAll('.explanation-box.visible').forEach(box => {
+             box.classList.remove('visible');
+        });
+    }
+
+    tabs.forEach(button => {
+        button.addEventListener('click', () => {
+            activateTab(button.dataset.tab);
+        });
+    });
+
+    interactiveElements.forEach(element => {
+        element.addEventListener('click', () => {
+            const targetId = element.dataset.target;
+            const explanationBox = document.getElementById(targetId);
+            
+            if (explanationBox) {
+                const isVisible = explanationBox.classList.contains('visible');
+                
+                // Hide all other open boxes
+                document.querySelectorAll('.explanation-box.visible').forEach(box => {
+                    if (box.id !== targetId) {
+                         box.classList.remove('visible');
+                    }
+                });
+
+                // Toggle visibility of the current box
+                if(isVisible) {
+                    explanationBox.classList.remove('visible');
+                } else {
+                    explanationBox.classList.add('visible');
+                }
+            }
+        });
+    });
+
+    // Initialize the app on load
+    // Note: The sequential logic previously here has been removed for reliability.
+    activateTab('setup');
+});
+</script>
+
+</body>
+</html>
